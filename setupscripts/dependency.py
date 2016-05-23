@@ -6,7 +6,7 @@ def install_talib_for_windows():
 	#target = 'ta-lib-0.4.0-msvc.zip'
 	#util.download(url,target)
 	#util.decompressZip(target,'C:\\')
-    cmd = 'pip install setupscripts\TA_Lib-0.4.9-cp27-none-win_amd64.whl'
+    cmd = 'pip install setupscripts\TA_Lib-0.4.9-cp35-none-win32.whl'
     result = os.popen(cmd).readlines()
     util.printCommandResult(result)
 
@@ -37,9 +37,9 @@ def pip_download_install():
     url = 'https://pypi.python.org/packages/source/p/pip/pip-6.0.8.tar.gz'
     target = 'pip-6.0.8.tar.gz'
     targetdir = 'pip-6.0.8'
-    print(('============ downloading ' + target + ' from:' + url))
+    print('============ downloading ' + target + ' from:' + url)
     util.download(url,target)
-    print(('============ extracting ' + target))
+    print('============ extracting ' + target)
     util.decompress(target,'.')
     os.chdir(targetdir)
     print('============ installing pip')
@@ -55,7 +55,7 @@ def create_dependencies(platform):
              ('matplotlib', 'matplotlib'),
              ('progressbar', 'progressbar'),
              ('logbook', 'logbook')
-#             ('talib' , 'TA-Lib == 0.4.8') 
+#             ('talib' , 'TA-Lib == 0.4.8')
     ]
     if platform != 'Windows':
         libs.append(('talib', 'TA-Lib == 0.4.8'))
