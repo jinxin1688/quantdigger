@@ -109,7 +109,7 @@ class TestSeries(unittest.TestCase):
         logger.info('-- 系统序列变量值的正确性测试成功 --')
 
         #
-        for i in xrange(0, len(uvars['dlist'])):
+        for i in range(0, len(uvars['dlist'])):
             self.assertTrue(i+1 == uvars['dlist'][i])
         self.assertTrue(len(uvars['numseries'])==len(open) and len(open)>0, '系列变量长度不一致')
         logger.info('-- 用户普通变量测试成功 --')
@@ -121,7 +121,7 @@ class TestSeries(unittest.TestCase):
         dt1980 = datetime.datetime(1980,1,1)
         dt1000 = datetime.datetime(1000,1,1)
         dt3000 = datetime.datetime(3000,1,1)
-        for i in xrange(0, len(numseries)):
+        for i in range(0, len(numseries)):
             if i < 99:
                 self.assertTrue(numseries[i] == 0.0, '用户数字序列变量测试失败!') 
                 self.assertTrue(dtseries[i] == dt1980, '用户时间序列变量测试失败!') 
@@ -134,7 +134,7 @@ class TestSeries(unittest.TestCase):
         logger.info('-- 用户序列变量自动追加测试成功 --')
 
         # 回溯测试
-        for i in xrange(0, len(open)):
+        for i in range(0, len(open)):
             if i-3 >= 0:
                 self.assertTrue(open3[i] == open[i-3], "系统序列变量回溯测试失败！" )
                 self.assertTrue(dt3[i] == dt[i-3], "系统序列变量回溯测试失败！" )
@@ -209,7 +209,7 @@ class TestIndicator(unittest.TestCase):
         # 分别测试单值和多值指标函数。
         source_ma2 = talib.SMA(np.asarray(close), 2)
         true_test, false_test = [], []
-        for i in xrange(0, len(close)):
+        for i in range(0, len(close)):
             if i >=  1:
                 true_test.append(ma2[i] == source_ma2[i])
             else:
@@ -219,7 +219,7 @@ class TestIndicator(unittest.TestCase):
         self.assertTrue(all(true_test), "单值指标正例测试失败!")
         source_ma2 = talib.SMA(np.asarray(open), 2)
         true_test, false_test = [], []
-        for i in xrange(0, len(open)):
+        for i in range(0, len(open)):
             if i >=  1:
                 true_test.append(ma2[i] == source_ma2[i])
             else:
@@ -230,7 +230,7 @@ class TestIndicator(unittest.TestCase):
 
         true_test, false_test = [], []
         source_ma2 = talib.SMA(np.asarray(close), 2)
-        for i in xrange(0, len(close)):
+        for i in range(0, len(close)):
             if i >= 4:
                 true_test.append(pre_ma2[i] == source_ma2[i-3])
             else:
@@ -240,7 +240,7 @@ class TestIndicator(unittest.TestCase):
         self.assertFalse(any(false_test), "单值指标回溯正例测试失败")
         true_test, false_test = [], []
         source_ma2 = talib.SMA(np.asarray(open), 2)
-        for i in xrange(0, len(close)):
+        for i in range(0, len(close)):
             if i >= 4:
                 true_test.append(pre_ma2[i] == source_ma2[i-3])
             else:
@@ -253,7 +253,7 @@ class TestIndicator(unittest.TestCase):
         #
         u, m, l = talib.BBANDS(np.asarray(close), 2, 2, 2)
         true_test, false_test = [], []
-        for i in xrange(0, len(close)):
+        for i in range(0, len(close)):
             if i >=  1:
                 true_test.append(boll['upper'][i] == u[i])
                 true_test.append(boll['middler'][i] == m[i])
@@ -266,7 +266,7 @@ class TestIndicator(unittest.TestCase):
         self.assertTrue(all(true_test), "多值指标正例测试失败!")
         u, m, l = talib.BBANDS(np.asarray(open), 2, 2, 2)
         true_test, false_test = [], []
-        for i in xrange(0, len(close)):
+        for i in range(0, len(close)):
             if i >=  1:
                 true_test.append(boll['upper'][i] == u[i])
                 true_test.append(boll['middler'][i] == m[i])
@@ -282,7 +282,7 @@ class TestIndicator(unittest.TestCase):
 
         true_test, false_test = [], []
         u, m, l = talib.BBANDS(np.asarray(close), 2, 2, 2)
-        for i in xrange(0, len(close)):
+        for i in range(0, len(close)):
             if i >= 4:
                 true_test.append(boll3['upper'][i] ==  u[i-3])
             else:
@@ -291,7 +291,7 @@ class TestIndicator(unittest.TestCase):
         self.assertFalse(any(false_test), "多值指标回溯正例测试失败")
         true_test, false_test = [], []
         u, m, l = talib.BBANDS(np.asarray(open), 2, 2, 2)
-        for i in xrange(0, len(close)):
+        for i in range(0, len(close)):
             if i >= 4:
                 true_test.append(boll3['upper'][i] == u[i-3])
             else:

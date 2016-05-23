@@ -35,7 +35,7 @@ class Profile(object):
         self._dcontexts = {}
         self._ith_comb = i   # 对应于第几个组合
         self._main_pcontract = strpcon
-        for key, value in dcontexts.iteritems():
+        for key, value in dcontexts.items():
             self._dcontexts[key] = value
 
     def name(self, j=None):
@@ -146,11 +146,11 @@ class Profile(object):
         pcon = strpcon if strpcon else self._main_pcontract
         if j is not None:
             return {v.name: v for v in self._dcontexts[pcon].
-                    indicators[self._ith_comb][j].itervalues()}
+                    indicators[self._ith_comb][j].values()}
         rst = {}
         for j in range(0, len(self._blts)):
             t = {v.name: v for v in self._dcontexts[pcon].
-                 indicators[self._ith_comb][j].itervalues()}
+                 indicators[self._ith_comb][j].values()}
             rst.update(t)
         return rst
 
@@ -236,11 +236,10 @@ class Profile(object):
             assert(left_vol == 0 or last_index == 0)
 
 
-class Blotter(object):
+class Blotter(object, metaclass=ABCMeta):
     """
     订单管理。
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, name):
         self.name = name
@@ -311,7 +310,7 @@ class SimpleBlotter(Blotter):
                         order.contract, order.direction)]
                     pos.closable += order.quantity
             self.open_orders.clear()
-            for key, pos in self.positions.iteritems():
+            for key, pos in self.positions.items():
                 pos.closable += pos.today
                 pos.today = 0
         self._datetime = dt
@@ -328,7 +327,7 @@ class SimpleBlotter(Blotter):
         order_margin = 0
         # 计算当前持仓历史盈亏。
         # 以close价格替代市场价格。
-        for key, pos in self.positions.iteritems():
+        for key, pos in self.positions.items():
             bar = self._bars[key.contract]
             new_price = bar.open if at_baropen else bar.close
             pos_profit += pos.profit(new_price)
@@ -351,7 +350,7 @@ class SimpleBlotter(Blotter):
         # 强平功能，使交易继续下去。
         dh['cash'] = dh['equity'] - margin - order_margin
         if dh['cash'] < 0:
-            for key in self.positions.iterkeys():
+            for key in self.positions.keys():
                 if not key.contract.is_stock:
                     # @NOTE  只要有一个是期货，在资金不足的时候就得追加保证金
                     raise Exception('需要追加保证金!')
@@ -476,7 +475,7 @@ class SimpleBlotter(Blotter):
             price_type = self._all_transactions[-1].price_type
         else:
             price_type = PriceType.LMT
-        for pos in self.positions.values():
+        for pos in list(self.positions.values()):
             order = Order(
                 self._datetime,
                 pos.contract,

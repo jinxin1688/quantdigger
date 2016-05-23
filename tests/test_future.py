@@ -426,7 +426,7 @@ def holdings_buy_maked_curbar(data, capital, long_margin, volume_multiple):
     cashes = []
     UNIT = 1
     poscost = 0
-    for dt, price in data.close.iteritems():
+    for dt, price in data.close.items():
         curtime = dt.time()
         if curtime in [buy1, buy2, buy3]:
             poscost = (poscost*quantity + price*(1+settings['future_commission'])*UNIT)/ (quantity+UNIT)
@@ -469,7 +469,7 @@ def holdings_short_maked_curbar(data, capital, short_margin, volume_multiple):
     cashes = []
     UNIT = 2
     poscost = 0
-    for dt, price in data.close.iteritems():
+    for dt, price in data.close.items():
         curtime = dt.time()
         if curtime in [buy1, buy2, buy3]:
             poscost = (poscost*quantity + price*(1-settings['future_commission'])*UNIT)/ (quantity+UNIT)
@@ -509,27 +509,27 @@ def entries_maked_nextbar(data):
     predt = data.index[0]
     prelow = data.low[0]
 
-    for  dt, low in data.low.iteritems():
+    for  dt, low in data.low.items():
         if dt.date() == predt.date() and dt.time() < sell1 and prelow - low >= OFFSET:
             buy_entries.append(predt)
         prelow = low
         predt = dt
 
-    for  dt, high in data.high.iteritems():
+    for  dt, high in data.high.items():
         if dt.date() == predt.date() and dt.time() < sell1 and high - prehigh >= OFFSET:
             short_entries.append(predt)
             #print predt, low-prelow
         prehigh = high
         predt = dt
 
-    for dt, high in data.high.iteritems():
+    for dt, high in data.high.items():
         if dt.time() > buy3 and high - prehigh >= OFFSET:
             sell_entries.append(predt)
             #print predt, high-prehigh
         prehigh = high
         predt = dt
 
-    for  dt, low in data.low.iteritems():
+    for  dt, low in data.low.items():
         if dt.time() > buy3 and prelow - low >= OFFSET:
             cover_entries.append(predt)
             #print predt, low-prelow
@@ -547,12 +547,12 @@ def holdings_buy_maked_nextbar(data, buy_entries, capital, long_margin, volume_m
     dts = []
     cashes = []
     prelow = data.low[0]
-    trans_entries = map(lambda x: x+datetime.timedelta(minutes = 1), buy_entries)
+    trans_entries = [x+datetime.timedelta(minutes = 1) for x in buy_entries]
     quantity = 0
     poscost = 0
     preclose = 0
     UNIT = 1
-    for dt, low in data.low.iteritems():
+    for dt, low in data.low.items():
         curtime = dt.time()
         close = data.close[dt]
         if dt in trans_entries:
@@ -583,13 +583,13 @@ def holdings_short_maked_nextbar(data, buy_entries, capital, short_margin, volum
     dts = []
     cashes = []
     prehigh = data.high[0]
-    trans_entries = map(lambda x: x+datetime.timedelta(minutes = 1), buy_entries)
+    trans_entries = [x+datetime.timedelta(minutes = 1) for x in buy_entries]
     poscost = 0
     quantity = 0
     preclose = 0
     close_profit = 0    # 累计平仓盈亏
     UNIT = 1
-    for dt, high in data.high.iteritems():
+    for dt, high in data.high.items():
         curtime = dt.time()
         close = data.close[dt]
         if dt in trans_entries:
@@ -621,10 +621,10 @@ def holdings_sell_maked_nextbar(data, sell_entries, capital, long_margin, volume
     cashes = []
     dts = []
     # 从平仓点计算平仓成交点
-    trans_entries = map(lambda x: x+datetime.timedelta(minutes = 1), sell_entries)
+    trans_entries = [x+datetime.timedelta(minutes = 1) for x in sell_entries]
     bprice = None
     prehigh = data.high[0]
-    for dt, high in data.high.iteritems():
+    for dt, high in data.high.items():
         close = data.close[dt]
         if dt.time() == buy1:
             bprice = close * (1+settings['future_commission'])
@@ -659,10 +659,10 @@ def holdings_cover_maked_nextbar(data, cover_entries, capital, short_margin, vol
     equities = [] 
     cashes = []
     dts = []
-    trans_entries = map(lambda x: x+datetime.timedelta(minutes = 1), cover_entries)
+    trans_entries = [x+datetime.timedelta(minutes = 1) for x in cover_entries]
     bprice = None
     prelow = data.low[0]
-    for dt, low in data.low.iteritems():
+    for dt, low in data.low.items():
         close = data.close[dt]
         if dt.time() == buy1:
             bprice = close * (1-settings['future_commission'])

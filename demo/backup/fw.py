@@ -10,7 +10,7 @@ import dstushare
 _default_datasource = dstushare.CachedStockTsSource('tscache')
 
 def run(TheStrategy, code, datasource=_default_datasource):
-    print 'code: ' + code
+    print('code: ' + code)
     pcon = stock(code)
     dt_start = '20130101'
     #dt_end = '20150819'
@@ -24,6 +24,6 @@ def run(TheStrategy, code, datasource=_default_datasource):
     try:
         for trans in algo.blotter.transactions:
             deals.update_positions(a, b, trans);
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
     plotting.plot_result(simulator.data[pcon], algo._indicators, b, algo.blotter)

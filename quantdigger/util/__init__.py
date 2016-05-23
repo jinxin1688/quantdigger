@@ -3,7 +3,7 @@
 import datetime
 from logbook import Logger
 import time
-from progressbar import ProgressBar
+from .progressbar import ProgressBar
 
 elogger = Logger('engine')
 dlogger = Logger('data')

@@ -41,7 +41,7 @@ def get_stock_signal_data():
 
 price_data = pd.read_csv('./work/IF000.csv', index_col=0, parse_dates=True)
 #import matplotlib.font_manager as font_manager
-print len(price_data)
+print(len(price_data))
 fig = plt.figure()
 frame = widgets.MultiWidgets(fig, price_data, 50, 4, 1)
 ax_candles,  ax_volume = frame.get_subwidgets()

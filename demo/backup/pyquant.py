@@ -124,7 +124,7 @@ class MainWindow(QtGui.QMainWindow):
         try:
             kwindow = widgets.CandleWindow("kwindow", price_data, 100, 50)
             frame.add_widget(0, kwindow, True)
-            signal = indicator.TradingSignal(zip(zip(entry_x,entry_y),zip(exit_x,exit_y)), c=colors, lw=2)
+            signal = indicator.TradingSignal(list(zip(list(zip(entry_x,entry_y)),list(zip(exit_x,exit_y)))), c=colors, lw=2)
             frame.add_indicator(0, signal)
 
             # 指标窗口
@@ -133,9 +133,9 @@ class MainWindow(QtGui.QMainWindow):
             frame.add_indicator(1, indicator.RSI(price_data.close, 14, name='RSI', fillcolor='b'))
             frame.add_indicator(2, indicator.Volume(price_data.open, price_data.close, price_data.vol))
             frame.draw_window()
-        except Exception, e:
-            print "----------------------" 
-            print e
+        except Exception as e:
+            print("----------------------") 
+            print(e)
 
         return frame
 

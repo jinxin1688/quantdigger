@@ -20,7 +20,7 @@ class DemoStrategy(TradingStrategy):
     """ 策略实例 """
     def __init__(self, exe):
         super(DemoStrategy, self).__init__(exe)
-        print 'start: ', self.datetime[0]
+        print('start: ', self.datetime[0])
         self.ma20 = MA(self, self.close, 20,'ma20', 'b', '1')
         self.ma10 = MA(self, self.close, 10,'ma10', 'y', '1')
         self.b_upper, self.b_middler, self.b_lower = BOLL(self, self.close, 10,'boll10', 'y', '1')
@@ -69,9 +69,9 @@ if __name__ == '__main__':
                                     algo.blotter.all_holdings)
 
         
-    except Exception, e:
+    except Exception as e:
         import traceback
-        print e
-        print traceback.format_exc()
+        print(e)
+        print(traceback.format_exc())
         #print e
 

@@ -42,7 +42,7 @@ def import_contracts(decode=False):
                         row['short_margin_ratio'], row['price_tick'], row['volume_multiple'])
                 contracts.append(t)
                 codes.add(code)
-    contracts = zip(*contracts)
+    contracts = list(zip(*contracts))
     rst = {
             'key': contracts[0],
             'code': contracts[1],

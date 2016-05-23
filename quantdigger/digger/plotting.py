@@ -22,7 +22,7 @@ def plot_strategy(price_data, indicators={}, deals=[], curve=[], marks=[]):
     """
         显示回测结果。
     """
-    print "plotting.."
+    print("plotting..")
     fig = plt.figure()
     frame = widgets.MultiWidgets(
         fig, price_data,
@@ -42,13 +42,13 @@ def plot_strategy(price_data, indicators={}, deals=[], curve=[], marks=[]):
         frame.add_technical(0, curve, True)
     frame.add_technical(1, Volume(price_data.open, price_data.close, price_data.volume))
     ## 添加指标
-    for name, indic in indicators.iteritems():
+    for name, indic in indicators.items():
         frame.add_technical(0, indic)
     # 绘制标志
     if marks:
         if marks[0]:
             # plot lines
-            for name, values in marks[0].iteritems():
+            for name, values in marks[0].items():
                 v = values[0]
                 ith_ax = v[0]
                 twinx = v[1]
@@ -71,7 +71,7 @@ def plot_strategy(price_data, indicators={}, deals=[], curve=[], marks=[]):
                     frame.add_technical(ith_ax, curve, twinx)
         if marks[1]:
             # plot texts
-            for name, values in marks[1].iteritems():
+            for name, values in marks[1].items():
                 for v in values:
                     ith_ax, x, y, text = v[0], v[1], v[2], v[3]
                     color, size, rotation = v[4], v[5], v[6]

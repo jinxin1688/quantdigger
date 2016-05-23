@@ -44,7 +44,7 @@ def tech_init(method):
         #
         default.update(method_args)
         # 属性创建
-        for key, value in default.iteritems():
+        for key, value in default.items():
             setattr(self, key, value)
         # 运行构造函数
         rst = method(self, *args, **kwargs)
@@ -104,15 +104,15 @@ class TechnicalBase(PlotInterface):
         self.data = self._args[0]
         # 数据转化成ta-lib能处理的格式
         self._args[0] = transform2ndarray(self._args[0])
-        apply(self._vector_algo, tuple(self._args))
+        self._vector_algo(*tuple(self._args))
         if not hasattr(self, 'values'):
             raise Exception("每个指标都必须有value属性，代表指标计算结果！")
         if isinstance(self.values, dict):
             self.series = OrderedDict()
-            for key, value in self.values.iteritems():
+            for key, value in self.values.items():
                 self.series[key] = series.NumberSeries(
                     value, self.name, self, float('nan'))
-            for key, value in self.series.iteritems():
+            for key, value in self.series.items():
                 setattr(self, key, value)
             self.is_multiple = True
         else:
@@ -150,13 +150,13 @@ class TechnicalBase(PlotInterface):
     @property
     def curbar(self):
         if self.is_multiple:
-            return self.series.itervalues().next().curbar
+            return iter(self.series.values()).next().curbar
         return self.series[0].curbar
 
     def __size__(self):
         """"""
         if self.is_multiple:
-            return len(self.series.itervalues().next())
+            return len(next(iter(self.series.values())))
         return len(self.series[0])
 
     #def debug_data(self):

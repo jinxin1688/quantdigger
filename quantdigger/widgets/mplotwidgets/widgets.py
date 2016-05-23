@@ -3,7 +3,7 @@ from matplotlib.widgets import AxesWidget
 from matplotlib.widgets import MultiCursor
 import matplotlib.ticker as mticker
 from matplotlib.ticker import Formatter
-from mplots import Candles
+from .mplots import Candles
 import logbook
 import sys
 logbook.StreamHandler(sys.stdout).push_application()
@@ -224,10 +224,10 @@ class Slider(AxesWidget):
 
     def _update_observer(self, event):
         """ 通知相关窗口更新数据 """
-        for name, obj in self.observers.iteritems():
+        for name, obj in self.observers.items():
             try:
                 obj.on_slider(self.val, event)
-            except Exception, e:
+            except Exception as e:
                 print(e)
 
 
@@ -414,7 +414,7 @@ class MultiWidgets(object):
                 self.axes.append(twaxes)
                 technical.plot(twaxes)
                 self._cursor_axes_index[ith_axes] = len(self.axes) - 1
-                axes = [self.axes[i] for i in self._cursor_axes_index.values()]
+                axes = [self.axes[i] for i in list(self._cursor_axes_index.values())]
                 axes = list(reversed(axes))
                 self._cursor = MultiCursor(self._fig.canvas, axes,
                                             color='r', lw=2, horizOn=False,
@@ -471,7 +471,7 @@ class MultiWidgets(object):
             if connect_slider:
                 self._slider.add_observer(widget)
             return widget
-        except Exception, e:
+        except Exception as e:
             raise e
 
     def on_slider(self, val, event):
@@ -531,7 +531,7 @@ class MultiWidgets(object):
     def on_leave_axes(self, event):
         if event.inaxes is self._slider_ax:
             # 进入后会创建_slider_cursor,离开后复原
-            axes = [self.axes[i] for i in self._cursor_axes_index.values()]
+            axes = [self.axes[i] for i in list(self._cursor_axes_index.values())]
             #axes = list(reversed(axes)) # 很奇怪，如果没有按顺序给出，显示会有问题。
             self._cursor = MultiCursor(self._fig.canvas, axes, color='r', lw=2, horizOn=False, vertOn=True)
             event.canvas.draw()
@@ -573,8 +573,8 @@ class MultiWidgets(object):
             user_axes = self._fig.axes[2:]
             bottom += unit * ratio
         self._axes = list(reversed(user_axes))
-        map(lambda x: x.grid(True), self._axes)
-        map(lambda x: x.set_xticklabels([]), self._axes[1:])
+        list(map(lambda x: x.grid(True), self._axes))
+        list(map(lambda x: x.set_xticklabels([]), self._axes[1:]))
         for ax in self.axes:
             ax.get_yaxis().get_major_formatter().set_useOffset(False)
             # ax.get_yaxis().get_major_formatter().set_scientific(False)
@@ -650,7 +650,7 @@ class MultiWidgets(object):
 
     def _xticks_to_display(self, start, end, delta):
         xticks = []
-        for i in xrange(start, end):
+        for i in range(start, end):
             if i >= 1:
                 if delta.days >= 1:
                     if self._data.index[i].month != self._data.index[i-1].month:

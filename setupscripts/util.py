@@ -4,8 +4,8 @@ def download(url,target):
         import urllib.request,re,sys
         data = urllib.request.urlopen(url).read()
     else:
-        import urllib2
-        data = urllib2.urlopen(url).read()
+        import urllib.request, urllib.error, urllib.parse
+        data = urllib.request.urlopen(url).read()
     with open(target,"wb") as code:
         code.write(data)
 

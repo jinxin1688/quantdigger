@@ -97,7 +97,7 @@ class TurtleStrategy(TradingStrategy):
     '''忽略市场选择的海龟策略'''
     def __init__(self, exe):
         super(TurtleStrategy, self).__init__(exe)
-        print 'start: ', self.datetime[0]
+        print('start: ', self.datetime[0])
         self.b_upper, self.b_middler, self.b_lower = BOLL(self, self.close, 10,'boll10', 'y', '1')
         self.atr = []
         self.tr = []
@@ -115,7 +115,7 @@ class TurtleStrategy(TradingStrategy):
             atr = (daysm1 * self.atr[-1] + self.tr[-1]) / _ATR_DAYS
         else:
             atr = np.nan
-        print 'atr:', atr
+        print('atr:', atr)
         self.atr.append(atr)
 
     def __get_position_size(self, price):
@@ -125,11 +125,11 @@ class TurtleStrategy(TradingStrategy):
         q = 0.01 * self.cash() / atr
         quantity = int(q / P) * P
         max_quantity = int(self.cash() / price / P) * P
-        print 'p.s 资金{:}, 价格{:}, 平均波动{:}, 规模确认{:}, 最大规模{:}'.format(
-            self.cash(), price, atr, quantity, max_quantity)
+        print('p.s 资金{:}, 价格{:}, 平均波动{:}, 规模确认{:}, 最大规模{:}'.format(
+            self.cash(), price, atr, quantity, max_quantity))
         #return max_quantity
         if quantity > max_quantity:
-            print '资金不足！全仓入场(规模确认%s，最大规模%s)' % (quantity, max_quantity)
+            print('资金不足！全仓入场(规模确认%s，最大规模%s)' % (quantity, max_quantity))
             return max_quantity
         else:
             return quantity
@@ -145,22 +145,22 @@ class TurtleStrategy(TradingStrategy):
         signal = self.donchian.signal
         if isinstance(signal, EntrySignal):
             quantity = self.__get_position_size(signal.price)
-            print '## buy signal', signal.price, quantity
+            print('## buy signal', signal.price, quantity)
             if quantity > 0:
                 self.buy('long', signal.price, quantity)
                 self.last_buy_price = signal.price
                 self.stop_price = signal.price - 2 * self.pre_atr
-                print 'buy', self.datetime[0].date(), signal.price, quantity, self.cash(), signal.desc
+                print('buy', self.datetime[0].date(), signal.price, quantity, self.cash(), signal.desc)
         elif isinstance(signal, ExitSignal):
             if self.position() > 0:
                 self.sell('long', signal.price, self.position())
                 self.stop_price = None
-                print 'sel', self.datetime[0].date(), signal.price, self.position(), signal.desc
+                print('sel', self.datetime[0].date(), signal.price, self.position(), signal.desc)
         elif self.stop_price is not None and self.low <= self.stop_price:
             if self.position() > 0:
                 self.sell('long', self.close, self.position())
                 self.stop_price = None
-                print 'sel', self.datetime[0].date(), self.close, self.position(), 'stop'
+                print('sel', self.datetime[0].date(), self.close, self.position(), 'stop')
 
 
 if __name__ == '__main__':

@@ -49,7 +49,7 @@ class LocalData(object):
             self._src = CsvSource(settings['data_path'])
         try:
             Contract.info = self.get_contracts()
-        except Exception, e:
+        except Exception as e:
             # @TODO
             pass
         self.source = settings['source']
@@ -154,8 +154,8 @@ class ServerData(object):
 
     def get_tushare_bars(self, pcontract, dt_start, dt_end):
         import tushare as ts
-        print "get stock data with tushare... (start=%s,end=%s)" % \
-            (dt_start, dt_end)
+        print("get stock data with tushare... (start=%s,end=%s)" % \
+            (dt_start, dt_end))
         if pcontract.period._type == 'Minute':
             data = tick2period(pcontract.contract.code,
                                str(pcontract.period)[:-3].replace('.', ''),

@@ -9,7 +9,7 @@ class MaStrategy(TradingStrategy):
     '''金叉策略'''
     def __init__(self, exe):
         super(MaStrategy, self).__init__(exe)
-        print 'start: ', self.datetime[0]
+        print('start: ', self.datetime[0])
 
         self.malong = MA(self, self.close, 50,'malong', 'b', '1')
         self.mashort = MA(self, self.close, 20,'mashort', 'y', '1')
@@ -28,7 +28,7 @@ class MaStrategy(TradingStrategy):
         price = self.close[0]
         if self.position() == 0 and self.mashort > self.malong:# and self.mashort[1] <= self.malong[1]:
             if self.high <= self.close:
-                print 'fail to buy!'
+                print('fail to buy!')
                 return
             quantity = self.__get_position_size(price)
             if quantity > 0:

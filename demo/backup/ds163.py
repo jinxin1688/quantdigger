@@ -2,7 +2,7 @@
 # 从163获取数据的数据源
 
 import io
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import os
 import pickle
 import datetime
@@ -35,11 +35,11 @@ def _query_data(code, dt_start, dt_end):
         qs_part2 += '&start=' + _dt_to_string(dt_start)
     if dt_end is not None:
         qs_part2 += '&end=' + _dt_to_string(dt_end)
-    qs_part2 += '&fields=' + ';'.join(map(lambda i: i[0], _FIELDS))
+    qs_part2 += '&fields=' + ';'.join([i[0] for i in _FIELDS])
     for i in [0, 1]:
         qs_part1 = 'code=%s%s' % (i, code)
         url = '%s?%s' % (_HOST, qs_part1 + qs_part2)
-        content = urllib2.urlopen(url).read()
+        content = urllib.request.urlopen(url).read()
         parts = content.split('\n', 1)
         if len(parts) < 2 or parts[1].strip() == '':
             continue
@@ -47,7 +47,7 @@ def _query_data(code, dt_start, dt_end):
     raise Exception('没有%s(%s ~ %s)的数据' % (code, dt_start, dt_end))
 
 def _post_process(title, rows):
-    new_title = ','.join(['datetime', 'code', 'name'] + map(lambda i: i[1], _FIELDS))
+    new_title = ','.join(['datetime', 'code', 'name'] + [i[1] for i in _FIELDS])
     new_content = '\n'.join([new_title, rows])
     data = pd.read_csv(io.BytesIO(new_content), index_col=0, parse_dates=True)
     data = data[data.volume != 0]  # 过滤没有交易的交易日

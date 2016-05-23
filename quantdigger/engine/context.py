@@ -8,7 +8,7 @@
 
 import copy
 import datetime
-import Queue
+import queue
 from quantdigger.engine.blotter import SimpleBlotter
 from quantdigger.engine.exchange import Exchange
 from quantdigger.engine.series import SeriesBase, NumberSeries, DateTimeSeries
@@ -99,7 +99,7 @@ class DataContext(object):
     def update_user_vars(self):
         """ 更新用户定义的变量。 """
         try:
-            siter = self._series[self.i][self.j].iteritems()
+            siter = iter(self._series[self.i][self.j].items())
         except IndexError:
             # The strategy doesn't have user defined series.
             pass
@@ -108,14 +108,14 @@ class DataContext(object):
                 s.update_curbar(self._curbar)
                 s.duplicate_last_element()
         try:
-            indic_iter = self.indicators[self.i][self.j].iteritems()
+            indic_iter = iter(self.indicators[self.i][self.j].items())
         except IndexError:
             # The strategy doesn't use indicators.
             pass
         else:
             for key, indic in indic_iter:
                 if indic.is_multiple:
-                    for key, value in indic.series.iteritems():
+                    for key, value in indic.series.items():
                         value.update_curbar(self._curbar)
                 else:
                     for s in indic.series:
@@ -286,7 +286,7 @@ class StrategyContext(object):
             # 事件处理。
             try:
                 event = self.events_pool.get()
-            except Queue.Empty:
+            except queue.Empty:
                 assert(False)
             except IndexError:
                 break
@@ -385,7 +385,7 @@ class StrategyContext(object):
         return self.blotter.open_orders
 
     def all_positions(self):
-        return self.blotter.positions.values()
+        return list(self.blotter.positions.values())
 
     def position(self, contract, direction):
         try:
@@ -427,7 +427,7 @@ class Context(object):
         self._data_contexts = {}       # str(PContract): DataContext
         self._contract2contexts = {}   # str(Contract): DataContext
         self._code2contexts = {}       # code: DataContext
-        for key, value in data.iteritems():
+        for key, value in data.items():
             self._data_contexts[key] = value
             self._contract2contexts[key.split('-')[0]] = value
             self._code2contexts[key.split('.')[0]] = value
@@ -456,7 +456,7 @@ class Context(object):
         self._trading = trading
         self._cur_strategy_context = self._strategy_contexts[i][j]
         if self._trading:
-            for data_context in self._data_contexts.values():
+            for data_context in list(self._data_contexts.values()):
                 data_context.i, data_context.j = i, j
         else:
             self._cur_data_context.i, self._cur_data_context.j = i, j

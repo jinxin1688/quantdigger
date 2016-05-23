@@ -37,9 +37,9 @@ def pip_download_install():
     url = 'https://pypi.python.org/packages/source/p/pip/pip-6.0.8.tar.gz'
     target = 'pip-6.0.8.tar.gz'
     targetdir = 'pip-6.0.8'
-    print('============ downloading ' + target + ' from:' + url)
+    print(('============ downloading ' + target + ' from:' + url))
     util.download(url,target)
-    print('============ extracting ' + target)
+    print(('============ extracting ' + target))
     util.decompress(target,'.')
     os.chdir(targetdir)
     print('============ installing pip')
@@ -62,7 +62,7 @@ def create_dependencies(platform):
     for lib in libs:
         try:
             __import__(lib[0])
-            print lib[0], "already installed!"
+            print(lib[0], "already installed!")
         except ImportError:
             requirements += '%s\n' % lib[1]
     if requirements:
@@ -83,7 +83,7 @@ def handle_dependency():
             install_talib_for_Darwin() 
         else:
             print('Failed to install ta-lib!')
-    except Exception, e:
+    except Exception as e:
         print('Failed to install ta-lib!')
         print(e)
 

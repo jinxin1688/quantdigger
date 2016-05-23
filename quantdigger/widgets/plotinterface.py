@@ -29,7 +29,7 @@ def plot_init(method):
         #
         default.update(method_args)
         # 属性创建
-        for key, value in default.iteritems():
+        for key, value in default.items():
             setattr(self, key, value)
         # 运行构造函数
         rst = method(self, *args, **kwargs)
@@ -170,7 +170,7 @@ class PlotInterface(object):
             self._upper = self._lower = []
             if isinstance(self.values, dict):
                 # 多值指标
-                values = zip(*self.values.itervalues())
+                values = list(zip(*iter(self.values.values())))
                 self._upper = [max(value) for value in values]
                 self._lower = [min(value) for value in values]
             else:
@@ -179,8 +179,8 @@ class PlotInterface(object):
             if self._xdata:
                 # 用户使用plot_line接口的时候触发这里
                 # @NOTE 重排，强制绘图点是按x有序的。
-                temp = zip(self._xdata, self.values)
+                temp = list(zip(self._xdata, self.values))
                 sdata = sorted(temp, key=lambda x: x[0])
-                temp = zip(*sdata)
+                temp = list(zip(*sdata))
                 self._xdata = list(temp[0])
                 self.values = list(temp[1])

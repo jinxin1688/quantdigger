@@ -31,7 +31,7 @@ class ExecuteUnit(object):
             spec_date (dict): time range for specific pcontracts
         """
         self.finished_data = []
-        pcontracts = map(lambda x: x.upper(), pcontracts)
+        pcontracts = [x.upper() for x in pcontracts]
         self.pcontracts = pcontracts
         self._combs = []
         self._data_manager = DataManager()
@@ -46,7 +46,7 @@ class ExecuteUnit(object):
         self.context = Context(self._all_data, self._max_window)
 
     def _init_strategies(self):
-        for pcon, dcontext in self._all_data.iteritems():
+        for pcon, dcontext in self._all_data.items():
             # switch context
             self.context.switch_to_contract(pcon)
             for i, combination in enumerate(self._combs):
@@ -64,13 +64,13 @@ class ExecuteUnit(object):
             code = strpcon.split('.')[0]
             if code == "*":
                 if strpcon == "*":  # '*'
-                    for key, value in exch_period2strpcon.iteritems():
+                    for key, value in exch_period2strpcon.items():
                         rst += value
                 else:
                     # "*.xxx"
                     # "*.xxx_period"
                     k = strpcon.split('.')[1]
-                    for key, value in exch_period2strpcon.iteritems():
+                    for key, value in exch_period2strpcon.items():
                         if '-' in k:
                             if k == key:
                                 rst += value
@@ -142,13 +142,13 @@ class ExecuteUnit(object):
         has_next = True
         tick_test = settings['tick_test']
         # 遍历每个数据轮, 次数为数据的最大长度
-        for pcon, data in self._all_data.iteritems():
+        for pcon, data in self._all_data.items():
             self.context.switch_to_contract(pcon)
             self.context.rolling_forward()
         while True:
             self.context.on_bar = False
             # 遍历数据轮的所有合约
-            for pcon, data in self._all_data.iteritems():
+            for pcon, data in self._all_data.items():
                 self.context.switch_to_contract(pcon)
                 if self.context.time_aligned():
                     self.context.update_system_vars()
@@ -179,7 +179,7 @@ class ExecuteUnit(object):
                 pbar.update(self.context.step*100.0/self._max_window)
             #
             toremove = []
-            for pcon, data in self._all_data.iteritems():
+            for pcon, data in self._all_data.items():
                 self.context.switch_to_contract(pcon)
                 has_next = self.context.rolling_forward()
                 if not has_next:

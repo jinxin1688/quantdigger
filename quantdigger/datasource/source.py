@@ -112,7 +112,7 @@ class SqlLiteSource(object):
         """
         self.cursor.execute("select * from contract")
         data = self.cursor.fetchall()
-        data = zip(*data)
+        data = list(zip(*data))
         df = pd.DataFrame({
             'code': data[1],
             'exchange': data[2],
@@ -150,9 +150,9 @@ class SqlLiteSource(object):
             id, utime = datautil.encode2id(strdt, dt)
             ids.append(id)
             utimes.append(utime)
-        data = zip(ids, utimes, tbdata['open'],
+        data = list(zip(ids, utimes, tbdata['open'],
                    tbdata['close'], tbdata['high'],
-                   tbdata['low'], tbdata['volume'])
+                   tbdata['low'], tbdata['volume']))
         try:
             self.cursor.execute('''CREATE TABLE {tb}
                          (id int primary key,
@@ -180,11 +180,11 @@ class SqlLiteSource(object):
         """
 
         tbname = 'contract'
-        data['key'] = map(lambda x: x.upper(), data['key'])
-        data = zip(data['key'], data['code'], data['exchange'], data['name'],
+        data['key'] = [x.upper() for x in data['key']]
+        data = list(zip(data['key'], data['code'], data['exchange'], data['name'],
                    data['spell'], data['long_margin_ratio'],
                    data['short_margin_ratio'],
-                   data['price_tick'], data['volume_multiple'])
+                   data['price_tick'], data['volume_multiple']))
         sql = '''CREATE TABLE {tb}
                      (key text primary key,
                       code text not null,
@@ -340,7 +340,7 @@ class CsvSource(object):
         fname = os.path.join(self._root, "CONTRACTS.csv")
         df = pd.read_csv(fname)
         df.index = df['code'] + '.' + df['exchange']
-        df.index = map(lambda x: x.upper(), df.index)
+        df.index = [x.upper() for x in df.index]
         return df
 
     def export_bars(self, index=True, index_label='index'):
@@ -409,38 +409,31 @@ class MongoSource(object):
         code_exchange, strdt = strpcon.split('-')
         code, exchange = code_exchange.split('.')
         colname = self.__get_collection_name(strdt, exchange, code)
-        ts = map(lambda dt: datautil.encode2id(strdt, dt), tbdata['datetime'])
-        ids, utimes = zip(*ts)
-        data = map(lambda (_id, _datetime,
-                           _open, _close,
-                           _high, _low,
-                           _volume): {
-            'id': _id, 'datetime': _datetime,
-            'open': _open, 'close': _close,
-            'high': _high, 'low': _low,
-            'volume': _volume
-        }, zip(ids, tbdata['datetime'], tbdata['open'], tbdata['close'],
-               tbdata['high'], tbdata['low'], tbdata['volume']))
+        ts = [datautil.encode2id(strdt, dt) for dt in tbdata['datetime']]
+        ids, utimes = list(zip(*ts))
+        data = [{
+            'id': _id__datetime__open__close__high__low__volume[0], 'datetime': _id__datetime__open__close__high__low__volume[1],
+            'open': _id__datetime__open__close__high__low__volume[2], 'close': _id__datetime__open__close__high__low__volume[3],
+            'high': _id__datetime__open__close__high__low__volume[4], 'low': _id__datetime__open__close__high__low__volume[5],
+            'volume': _id__datetime__open__close__high__low__volume[6]
+        } for _id__datetime__open__close__high__low__volume in zip(ids, tbdata['datetime'], tbdata['open'], tbdata['close'],
+               tbdata['high'], tbdata['low'], tbdata['volume'])]
         self.db[colname].insert_many(data)
 
     def import_contracts(self, data):
         colname = 'contract'
-        data['key'] = map(lambda x: x.upper(), data['key'])
-        data = map(lambda (_key, _code,
-                           _exchange, _name,
-                           _spell, _long_margin_ratio,
-                           _short_margin_ratio, _price_tick,
-                           _volume_multiple): {
-            'key': _key, 'code': _code,
-            'exchange': _exchange, 'name': _name,
-            'spell': _spell, 'long_margin_ratio': _long_margin_ratio,
+        data['key'] = [x.upper() for x in data['key']]
+        data = [{
+            'key': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[0], 'code': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[1],
+            'exchange': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[2], 'name': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[3],
+            'spell': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[4], 'long_margin_ratio': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[5],
             'short_margin_ratio': short_margin_ratio,
-            'price_tick': _price_tick,
-            'volume_multiple': _volume_multiple
-        }, zip(data['key'], data['code'], data['exchange'], data['name'],
+            'price_tick': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[7],
+            'volume_multiple': _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple[8]
+        } for _key__code__exchange__name__spell__long_margin_ratio__short_margin_ratio__price_tick__volume_multiple in zip(data['key'], data['code'], data['exchange'], data['name'],
                data['spell'], data['long_margin_ratio'],
                data['short_margin_ratio'], data['price_tick'],
-               data['volume_multiple']))
+               data['volume_multiple'])]
         self.db[colname].insert_many(data)
 
     def export_bars(self): pass

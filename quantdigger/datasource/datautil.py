@@ -171,16 +171,12 @@ def import_from_csv(self, paths):
             # @TODO
             print(path)
             raise Exception("错误的文件格式")
-        print("import: ", path)
+        print(("import: ", path))
         df = pd.read_csv(path, parse_dates='datetime')
         try:
-            df['datetime'] = map(
-                lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S"),
-                df['datetime'])
+            df['datetime'] = [datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S") for x in df['datetime']]
         except ValueError:
-            df['datetime'] = map(
-                lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"),
-                df['datetime'])
+            df['datetime'] = [datetime.datetime.strptime(x, "%Y-%m-%d") for x in df['datetime']]
         fname = path.split(os.path.sep)[-1]
 
         tbname = fname.split('-')[0].split('.')
@@ -197,16 +193,12 @@ def import_data(fpaths, ld):
             # @TODO
             print(path)
             raise Exception("错误的文件格式")
-        print("import data: ", path)
+        print(("import data: ", path))
         df = pd.read_csv(path, parse_dates='datetime')
         try:
-            df['datetime'] = map(
-                lambda x: datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S"),
-                df['datetime'])
+            df['datetime'] = [datetime.datetime.strptime(x, "%Y-%m-%d %H:%M:%S") for x in df['datetime']]
         except ValueError:
-            df['datetime'] = map(
-                lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"),
-                df['datetime'])
+            df['datetime'] = [datetime.datetime.strptime(x, "%Y-%m-%d") for x in df['datetime']]
         strpcon = path.split(os.path.sep)[-1].rstrip('.csv')
         ld.import_bars(df, strpcon)
 

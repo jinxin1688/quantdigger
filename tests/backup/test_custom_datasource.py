@@ -16,7 +16,7 @@ class DemoStrategy(TradingStrategy):
     """ 策略实例 """
     def __init__(self, exe):
         super(DemoStrategy, self).__init__(exe)
-        print 'start: ', self.datetime[0]
+        print('start: ', self.datetime[0])
 
         #self.mabase = MA(self, self.close, 100,'mabase', 'r', '1')
         self.mabig = MA(self, self.close, 20,'mabig', 'b', '1')
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     simulator.run()
     #print 'close: ', algo.close.data
     #print 'close length: ', algo.close.length_history
-    print 'total: %s, win: %s' % (algo.num_cont, algo.num_win)
+    print('total: %s, win: %s' % (algo.num_cont, algo.num_win))
 
     # 显示回测结果
     a = {}
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     try:
         for trans in algo.blotter.transactions:
             deals.update_positions(a, b, trans);
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
     plotting.plot_result(simulator.data[pcon], algo._indicators, b, algo.blotter)
 

@@ -31,21 +31,21 @@ class CachedDatasource(object):
         dt_start = _process_dt_start(dt_start)
         dt_end = _process_dt_end(dt_end)
         try:
-            print 'trying to load from cache'
+            print('trying to load from cache')
             return self.cache.load_data(pcontract, dt_start, dt_end)
         except CachedDatasource.LoadCacheException as e:
-            print 'updating cache'
+            print('updating cache')
             if e.cached_data is None:
                 missing_range = [(dt_start, dt_end)]
             else:
                 missing_range = e.missing_range
-            print 'missing range: %s' % missing_range
+            print('missing range: %s' % missing_range)
             missing_data = []
             for start, end in missing_range:
                 data = self.datasource.load_data(pcontract, start, end)
                 missing_data.append((data, start, end))
             self.cache.save_data(missing_data, pcontract)
-            print 'loading cache'
+            print('loading cache')
             return self.cache.load_data(pcontract, dt_start, dt_end)
 
     class LoadCacheException(Exception):
@@ -108,7 +108,7 @@ class LocalFsCache(object):
     def save_data(self, missing_data, pcontract):
         key = self.__to_key(pcontract)
         path = self.__key_to_path(key)
-        data_arr = map(lambda t: t[0], missing_data)
+        data_arr = [t[0] for t in missing_data]
         try:
             old_data = self.__load_data_from_path(path)
             data_arr.insert(0, old_data)
@@ -116,7 +116,7 @@ class LocalFsCache(object):
             pass
         data = _merge_data(data_arr)
         self.__save_data_to_path(data, path)
-        self.__update_meta(key, map(lambda t: (t[1], t[2]), missing_data))
+        self.__update_meta(key, [(t[1], t[2]) for t in missing_data])
         self.__save_meta()
 
     def __check_base_path(self):
@@ -146,14 +146,14 @@ class LocalFsCache(object):
             pickle.dump(self.meta, f)
 
     def __update_meta(self, key, range_lst):
-        starts, ends = map(lambda t: list(t), zip(*range_lst))
+        starts, ends = [list(t) for t in zip(*range_lst)]
         try:
             cached_start, cached_end = self.meta[key]
             starts.append(cached_start)
             ends.append(cached_end)
         except KeyError:
             pass
-        new_start = None if any(map(lambda d: d is None, starts)) else min(starts)
+        new_start = None if any([d is None for d in starts]) else min(starts)
         new_end = max(ends)
         self.meta[key] = new_start, new_end
 

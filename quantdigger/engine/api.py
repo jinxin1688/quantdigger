@@ -3,8 +3,7 @@ from quantdigger.engine.event import OrderEvent
 from abc import ABCMeta, abstractmethod
 
 
-class Trader(object):
-    __metaclass__ = ABCMeta
+class Trader(object, metaclass=ABCMeta):
     """ 交易类，包含了回调注册等高级封装。  """
 
     def __init__(self, arg):

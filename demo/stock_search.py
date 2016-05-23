@@ -29,7 +29,7 @@ class DemoStrategy(Strategy):
 
     def on_bar(self, ctx):
         if self.candicates:
-            print(ctx.curbar, self.candicates)
+            print((ctx.curbar, self.candicates))
             # 其它操作, 如买卖相关股票
 
         self.candicates = []

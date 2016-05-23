@@ -92,7 +92,7 @@ if __name__ == '__main__':
 
     run()
     stop = timeit.default_timer()
-    print "运行耗时: %d秒" % ((stop - start ))
+    print("运行耗时: %d秒" % ((stop - start )))
 
     # 绘制k线，交易信号线
     from quantdigger.digger import finance, plotting

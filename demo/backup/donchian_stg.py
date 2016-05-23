@@ -9,7 +9,7 @@ class DonChianStrategy(TradingStrategy):
     '''唐奇安通道策略'''
     def __init__(self, exe):
         super(DonChianStrategy, self).__init__(exe)
-        print 'start: ', self.datetime[0]
+        print('start: ', self.datetime[0])
         self.b_upper, self.b_middler, self.b_lower = BOLL(self, self.close, 10,'boll10', 'y', '1')
         self.num_cont = 0
         self.num_win = 0

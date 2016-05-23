@@ -50,7 +50,7 @@ def read_csv(path):
             filepath = path + os.sep + file
             if filepath.endswith(".CSV"):
                 fname =  file.split('-')[0]
-                print("import: ", fname)
+                print(("import: ", fname))
                 df = pd.read_csv(filepath, parse_dates={'datetime': ['date', 'time']},
                                  index_col='datetime')
                 df2sqlite(df, fname)
@@ -91,9 +91,9 @@ start = timeit.default_timer()
 open = close = high = low = []
 for row in c.execute('SELECT id, utime, open FROM A_SHFE'):
     #print row
-    print row
+    print(row)
 stop = timeit.default_timer()
-print (stop - start )
+print((stop - start ))
 
 get_tables(c)
 db.commit()

@@ -402,7 +402,7 @@ class Contract(object):
         try:
             return cls.info.ix[strcontract.upper(), 'long_margin_ratio']
         except KeyError:
-            print "Can't not find contract: %s" % strcontract
+            print("Can't not find contract: %s" % strcontract)
             return 1
             # assert(False)
 
@@ -411,7 +411,7 @@ class Contract(object):
         try:
             return cls.info.ix[strcontract.upper(), 'short_margin_ratio']
         except KeyError:
-            print "Can't not find contract: %s" % strcontract
+            print("Can't not find contract: %s" % strcontract)
             return 1
             # assert(False)
 
@@ -420,7 +420,7 @@ class Contract(object):
         try:
             return cls.info.ix[strcontract.upper(), 'volume_multiple']
         except KeyError:
-            print "Can't not find contract: %s" % strcontract
+            print("Can't not find contract: %s" % strcontract)
             return 1
             # assert(False)
 
